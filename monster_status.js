@@ -1,26 +1,20 @@
 (function () {
   try {
-    // 「ステータス」テーブルを探す
-    var capEls = Array.prototype.slice.call(
-      document.querySelectorAll('div.status table caption')
-    );
+    // ステータス表の caption=ステータス を探す
+    var capEls = Array.from(document.querySelectorAll('div.status table caption'));
     var cap = capEls.find(function (c) {
       return c.textContent.trim() === 'ステータス';
     });
-
     if (!cap) {
-      alert('ステータス表が見つかりませんでした');
+      alert('ステータス表が見つかりません');
       return;
     }
 
     var table = cap.closest('table');
-    var rows = Array.prototype.slice.call(
-      table.querySelectorAll('tbody tr')
-    );
-
-    // 対象ステータス
+    var rows = Array.from(table.querySelectorAll('tbody tr'));
     var targets = ['HP', '攻撃', '魔力', '防御', '命中', '敏捷'];
-    var results = [];
+    var lines = [];
+    var total = 0;
 
     rows.forEach(function (tr) {
       var th = tr.querySelector('th');
@@ -29,41 +23,61 @@
       var label = th.textContent.trim();
       if (targets.indexOf(label) === -1) return;
 
+      // HPだけ全角
+      var dlabel = (label === 'HP') ? 'ＨＰ' : label;
+
       var tds = tr.querySelectorAll('td');
       if (tds.length < 2) return;
 
-      var valText = tds[0].textContent.trim();   // 例: "2086/2086" or "300"
-      var bonusText = tds[1].textContent.trim(); // 例: "(+186)" or "(+0)"
+      var val = tds[0].textContent.trim();
+      var bonusTxt = tds[1].textContent.trim();
 
-      // 現在値（HPの場合は「/」より前だけ見る）
-      var currentStr = valText.split('/')[0].replace(/[^\d\-]/g, '');
-      var current = parseInt(currentStr, 10);
+      // 現在値（"2086/2086" → 2086）
+      var current = parseInt(val.split('/')[0].replace(/[^\d\-]/g, ''), 10);
       if (isNaN(current)) return;
 
-      // プラス値 "(+186)" → 186
-      var m = bonusText.match(/([+-]?\d+)/);
+      // 上昇値 "(+186)" → 186
+      var m = bonusTxt.match(/([+-]?\d+)/);
       var bonus = m ? parseInt(m[1], 10) : 0;
 
-      var base = current - bonus;          // 基礎ステータス
-      var percent = base !== 0 ? bonus / base * 100 : 0;
-      var percentStr = base !== 0 ? percent.toFixed(1) : '0.0';
+      var base = current - bonus;
+      var pct = base ? (bonus / base * 100) : 0;
+      total += pct;
 
-      // 表示用テキスト
-      results.push(
-        label +
-        ': 基礎' + base +
-        ' 現在' + current +
-        ' 上昇' + bonus +
-        ' (+' + percentStr + '%)'
+      var baseStr = String(base);
+      var bonusStr = String(bonus);
+
+      // 基礎値: 5 - 桁数 分のスペース
+      var basePad = ' '.repeat(Math.max(0, 5 - baseStr.length));
+      // 上昇値: 4 - 桁数 分のスペース
+      var bonusPad = ' '.repeat(Math.max(0, 4 - bonusStr.length));
+
+      // 上昇割合: 小数1桁、10未満なら頭にスペース1つ
+      var pctStr = (Math.abs(pct) < 10 ? ' ' : '') + pct.toFixed(1);
+
+      lines.push(
+        dlabel + ':' +
+        basePad + baseStr +
+        '+' + bonusPad + bonusStr +
+        ' (+' + pctStr + '%)'
       );
     });
 
-    if (results.length === 0) {
-      alert('対象ステータスが見つかりませんでした');
-    } else {
-      alert(results.join('\n'));
-    }
+    lines.push('-----------------------');
+    var totalStr = total.toFixed(1);
+    lines.push('合計: +' + totalStr + '%');
+
+    // 右上に表示用のボックス
+    var box = document.createElement('div');
+    box.style.cssText =
+      'position:fixed;top:10px;right:10px;z-index:99999;' +
+      'background:rgba(0,0,0,0.8);color:white;padding:10px 15px;' +
+      'border-radius:8px;font-family:monospace;white-space:pre;' +
+      'max-width:90%;cursor:pointer;font-size:14px;';
+    box.textContent = lines.join('\n');
+    box.onclick = function () { box.remove(); };
+    document.body.appendChild(box);
   } catch (e) {
-    alert('エラー: ' + e.message);
+    alert('エラー:' + e.message);
   }
 })();
