@@ -21,11 +21,11 @@
     return m ? Number(m[1]) : null;
   }
 
-  function calcBaseExp(r, g, l) {
-    return Math.round(r * g * ((l + 4) / 5) * 16);
+  function calcBaseRaw(r, g, l) {
+    return r * g * ((l + 4) / 5) * 16;
   }
 
-  function upsertExpP(li, baseExp) {
+  function upsertExpP(li, baseRaw) {
     let expP = Array.from(li.querySelectorAll('p'))
       .find(p => /経験値\s*[:：]/.test(p.textContent));
 
@@ -35,8 +35,10 @@
       ps.length ? ps[ps.length - 1].after(expP) : li.appendChild(expP);
     }
 
-    const sameTypeExp = Math.round(baseExp * 1.125);
-    expP.textContent = `経験値: 異種族${baseExp} / 同種族${sameTypeExp}`;
+    const diffType = Math.floor(baseRaw);
+    const sameType = Math.floor(baseRaw * 1.125);
+
+    expP.textContent = `経験値: 異種族${diffType} / 同種族${sameType}`;
   }
 
   document.querySelectorAll('nav.block li').forEach(li => {
@@ -44,6 +46,7 @@
     const g = getGrade(li);
     const l = getLevel(li);
     if (r == null || g == null || l == null) return;
-    upsertExpP(li, calcBaseExp(r, g, l));
+
+    upsertExpP(li, calcBaseRaw(r, g, l));
   });
 })();
