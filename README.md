@@ -10,12 +10,21 @@ javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-ka
 
 - 個体値の%を計算するやつ
 - モンスター画面で使用可能
-- TODO: 評価値の説明
 - 次のグレードに必要な個体値を追加予定
 - 合成経験値を追加予定
 - スキル継承率の追加検討中
 - Wikiリンクを追加検討中
 - セラエノの影響を調査中
+
+#### 評価値
+フォールド時のスコア、グレード判定、イベントの納品の基礎ptなどに使用される値  
+- フォールド時：評価値切り捨て
+- グレード
+  - 10以上20未満：C
+  - 20以上30未満：CC
+  - ︙
+  - 100以上：SSS
+  - 十の位だけ見ればわかりやすい
 
 <img src="./image/status.png" alt="status" style="width:320px; max-width:100%;">
 
@@ -36,7 +45,7 @@ javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-ka
 - 4種族 * 4グレード = 16通りのバザー検索を実行する
 - バザー画面で使用可能
 - 並び順は出品順のみ
-- リクエスト数が増えるため、乱用禁止
+- リクエスト数が増えるため、乱用厳禁
 
 ### 経験値 表示
 ```javascript
