@@ -169,8 +169,6 @@
       lines.push("経験値: 取得失敗");
     }
 
-    lines.push("-----------------------");
-
     /* ---------- 次のグレード ---------- */
     const currentTens = Math.floor(evalValue / 10);
     const target = (currentTens + 1) * 10;
@@ -216,7 +214,9 @@
     const pad3 = (n) => String(n).padStart(3, " ");
     const padPct = (x) => String(x.toFixed(1)).padStart(4, " ");
 
-    lines.push("次のグレードになるには");
+    const nextGradeLines = [];
+    nextGradeLines.push("-----------------------");
+    nextGradeLines.push("次のグレードになるには");
     for (const label of targets) {
       const info = statInfo[label];
       if (!info) continue;
@@ -227,7 +227,7 @@
       const pct = (b / info.base) * 100;
       const delta = b - info.bonus;
 
-      lines.push(
+      nextGradeLines.push(
         `${info.name}なら${pad4(b)}(${padPct(pct)}%) あと${pad3(delta)}`
       );
     }
@@ -236,9 +236,39 @@
     box.style.cssText =
       "position:fixed;top:10px;right:10px;z-index:99999;background:rgba(0,0,0,.8);" +
       "color:#fff;padding:10px 15px;border-radius:8px;font-family:monospace;" +
-      "white-space:pre;cursor:pointer;font-size:14px;max-width:90%;";
-    box.textContent = lines.join("\n");
-    box.onclick = () => box.remove();
+      "color:#fff;padding:10px 15px;border-radius:8px;font-family:monospace;" +
+      "font-size:14px;max-width:90%;";
+
+    const pre = document.createElement("pre");
+    pre.style.cssText = "margin:0;white-space:pre;";
+    pre.textContent = lines.join("\n");
+    box.appendChild(pre);
+
+    const toggleWrap = document.createElement("div");
+    toggleWrap.style.cssText = "margin-top:8px;text-align:right;";
+    box.appendChild(toggleWrap);
+
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.textContent = "もっと見る";
+    toggle.style.cssText = "font-size:12px;cursor:pointer;";
+    toggleWrap.appendChild(toggle);
+
+    let opened = false;
+    toggle.onclick = () => {
+      if (opened) return;
+      const nextPre = document.createElement("pre");
+      nextPre.style.cssText = "margin:8px 0 0;white-space:pre;";
+      nextPre.textContent = nextGradeLines.join("\n");
+      box.appendChild(nextPre);
+      toggleWrap.remove();
+      opened = true;
+    };
+
+    box.onclick = (e) => {
+      if (e.target === toggle) return;
+      box.remove();
+    };
     document.body.appendChild(box);
   } catch (e) {
     alert("エラー: " + e.message);
