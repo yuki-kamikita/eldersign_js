@@ -161,6 +161,33 @@
     return gm ? parseInt(gm[1], 10) : null;
   }
 
+  function buildMaxLevelLines(statInfo, maxLevel, rarity) {
+    const rc = GROWTH_COEFF_BY_RARITY[rarity] ?? 1.0;
+    const Gmax = 1 + rc;
+    const sqrtGmax = Math.sqrt(Gmax);
+
+    const pad5 = (n) => " ".repeat(Math.max(0, 5 - String(n).length));
+    const pad4 = (n) => " ".repeat(Math.max(0, 4 - String(n).length));
+
+    const lines = [];
+    lines.push("-----------------------");
+    lines.push(`Lv1->${maxLevel}(最大)時のステータス`);
+    for (const label of TARGETS) {
+      const info = statInfo[label];
+      if (!info) continue;
+
+      const factor = label === "HP" ? sqrtGmax : Gmax;
+      const lv1status = info.base + info.bonus
+      const maxTotal = Math.floor(lv1status * factor);
+
+      lines.push(
+        `${info.name}:${pad5(lv1status)}${lv1status} ->${pad5(maxTotal)}${maxTotal}`
+      );
+    }
+
+    return lines;
+  }
+
   function buildNextGradeLines(statInfo, evalValue) {
     const currentTens = Math.floor(evalValue / 10);
     const target = (currentTens + 1) * 10;
@@ -219,13 +246,13 @@
       const pct = (b / info.base) * 100;
       const delta = b - info.bonus;
 
-      lines.push(`${info.name}なら${pad4(b)}(${padPct(pct)}%) あと${pad3(delta)}`);
+      lines.push(`${info.name}: +${pad4(b)}(${padPct(pct)}%) あと${pad3(delta)}`);
     }
 
     return lines;
   }
 
-  function renderPanel(lines, nextGradeLines) {
+  function renderPanel(lines, moreLines) {
     const box = document.createElement("div");
     box.style.cssText =
       "position:fixed;top:10px;right:10px;z-index:99999;background:rgba(0,0,0,.8);" +
@@ -253,7 +280,7 @@
       if (opened) return;
       const nextPre = document.createElement("pre");
       nextPre.style.cssText = "margin:8px 0 0;white-space:pre;";
-      nextPre.textContent = nextGradeLines.join("\n");
+      nextPre.textContent = moreLines.join("\n");
       box.appendChild(nextPre);
       toggleWrap.remove();
       opened = true;
@@ -294,8 +321,10 @@
       lines.push("経験値: 取得失敗");
     }
 
+    const maxLevelLines = buildMaxLevelLines(statInfo, maxLevel, rarity);
     const nextGradeLines = buildNextGradeLines(statInfo, evalValue);
-    renderPanel(lines, nextGradeLines);
+    const moreLines = [...maxLevelLines, ...nextGradeLines];
+    renderPanel(lines, moreLines);
   } catch (e) {
     alert("エラー: " + e.message);
   }
