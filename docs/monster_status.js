@@ -269,14 +269,15 @@
     toggleWrap.style.cssText = "margin-top:8px;text-align:right;";
     box.appendChild(toggleWrap);
 
-    const toggle = document.createElement("button");
-    toggle.type = "button";
+    const toggle = document.createElement("a");
+    toggle.href = "#";
     toggle.textContent = "もっと見る";
-    toggle.style.cssText = "font-size:12px;cursor:pointer;";
+    toggle.style.cssText = "font-size:12px;cursor:pointer;text-decoration:underline;color:inherit;";
     toggleWrap.appendChild(toggle);
 
     let opened = false;
-    toggle.onclick = () => {
+    toggle.onclick = (e) => {
+      e.preventDefault();
       if (opened) return;
       const nextPre = document.createElement("pre");
       nextPre.style.cssText = "margin:8px 0 0;white-space:pre;";
