@@ -61,7 +61,8 @@ javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-ka
 javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-kamikita.github.io/eldersign_js/wiki_search.js";document.head.appendChild(s);})();
 ```
 - Wikiの検索結果画面を出す
-- 検索ワードを範囲指定した状態で使用可能
+- モンスター詳細ならモンスター名で検索
+- それ以外の画面なら範囲指定した文字で検索
 - 指定なしだと検索ワードを入れる画面になる
 - 検索結果遷移後に別のブックマークレット[I'm Feeling Lucky](#im-feeling-lucky)を使用すると検索結果の最上位に飛べる
 

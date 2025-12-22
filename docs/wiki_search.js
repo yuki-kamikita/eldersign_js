@@ -1,7 +1,8 @@
 javascript:(() => {
-  // 選択文字を優先。無ければ入力してもらう
+  // 選択文字を優先。無ければ<header><h2>の文字、さらに無ければ入力してもらう
   const selected = (window.getSelection?.().toString() ?? "").trim();
-  const keyword = (selected || prompt("AtWiki検索する文字を入力", "") || "").trim();
+  const headerText = (document.querySelector("header h2")?.textContent ?? "").trim();
+  const keyword = (selected || headerText || prompt("AtWiki検索する文字を入力", "") || "").trim();
   if (!keyword) return;
 
   const url =
