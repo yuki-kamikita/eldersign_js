@@ -1,21 +1,20 @@
 # AGENTS.md
 
-このリポジトリはブラウザゲーム「エルダーサイン」向けのブックマークレット集です。主に `docs/` 配下の JavaScript を GitHub Pages で配布し、README に掲載したブックマークレットから読み込みます。
+このリポジトリはブラウザゲーム「エルダーサイン」向けのブックマークレット集です。主に `docs/` 配下を GitHub Pages で配布し、README とツール集から案内します。
 
 ## 重要な場所
 - `docs/`：GitHub Pages で公開する配布物のルート。
-  - `web/`：HTMLベースのツール集（静的ページ）。
-  - `bookmarklet/`：ブックマークレット本体（ブラウザ実行の単体スクリプト）。
-- `docs/web/theme.css`：ツール集と `docs/web/` 内HTMLで共有するMaterial Design 3系テーマ
-- `README.md`：各ブックマークレットの説明とブックマーク用のスニペット。
-- `image/`：README 用のスクリーンショット。
+  - `index.html`：ツール集トップ。
+  - `theme.css`：ツール集と `docs/` 内HTMLで共有するMaterial Design 3系テーマ。
+  - `bookmarklet/`：ブックマークレット本体（ブラウザ実行の単体スクリプト）と案内ページ。
+- `docs/bookmarklet/index.html`：ブックマークレットの使い方と一覧。
+- `README.md`：ツール集/ブックマークレット案内へのリンク。
+- `docs/image/`：スクリーンショット置き場。
 
 ## 新規時の方針
-- `README.md`に今までの流れに沿って作成したブックマークレットの内容を追記する。
-
-### html追加時
-- `docs/web/index.html` にリンクを追加してください
-- `docs/web/` 内のHTMLには `./theme.css` を読み込み、ツール集と同等のテーマを適用する
+- ブックマークレットの内容は `docs/bookmarklet/index.html` に追記する。
+- Webツールを追加したら `docs/index.html` にリンクを追加する。
+- HTMLページは `./theme.css` を読み込み、ツール集と同等のテーマを適用する。
   
 
 ## 変更時の方針
