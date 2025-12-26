@@ -4,10 +4,15 @@
 - 他にあったら便利なツールのネタ
 - 感想
 
-# お品書き
+# ツール集
+- https://yuki-kamikita.github.io/eldersign-tool/web/
+- 計算ツールやデータベースなど、HTMLで作成する機能はここにまとめています
+
+
+# ブックマークレット
 ### ステータス 詳細表示
 ```javascript
-javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-kamikita.github.io/eldersign_js/monster_status.js";document.head.appendChild(s);})();
+javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-kamikita.github.io/eldersign-tool/bookmarklet/monster_status.js";document.head.appendChild(s);})();
 ```
 
 - 個体値の%を計算するやつ
@@ -30,7 +35,7 @@ javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-ka
 
 ### コンパニオン 派遣研究力
 ```javascript
-javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-kamikita.github.io/eldersign_js/companion.js";document.head.appendChild(s);})();
+javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-kamikita.github.io/eldersign-tool/bookmarklet/companion.js";document.head.appendChild(s);})();
 ```
 
 - コンパニオンの研究力表示
@@ -41,7 +46,7 @@ javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-ka
 
 ### バザー 検索ボタン
 ```javascript
-javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-kamikita.github.io/eldersign_js/bazaar_search.js";document.head.appendChild(s);})();
+javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-kamikita.github.io/eldersign-tool/bookmarklet/bazaar_search.js";document.head.appendChild(s);})();
 ```
 - バザー検索条件の変更を楽にする
 - バザー画面で使用可能
@@ -51,7 +56,7 @@ javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-ka
 
 ### バザー 全種族・全グレード検索
 ```javascript
-javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-kamikita.github.io/eldersign_js/bazaar_all.js";document.head.appendChild(s);})();
+javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-kamikita.github.io/eldersign-tool/bookmarklet/bazaar_all.js";document.head.appendChild(s);})();
 ```
 - 4種族 * 4グレード = 16通りのバザー検索を実行する
 - バザー画面で使用可能
@@ -60,7 +65,7 @@ javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-ka
 
 ### 経験値 表示
 ```javascript
-javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-kamikita.github.io/eldersign_js/exp.js";document.head.appendChild(s);})();
+javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-kamikita.github.io/eldersign-tool/bookmarklet/exp.js";document.head.appendChild(s);})();
 ```
 - 合成時に取得できる経験値を表示する
 - バザー・手持ち・合成・ガチャなどのモンスター一覧画面で使用可能
@@ -71,7 +76,7 @@ javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-ka
 
 ### Wiki 検索
 ```javascript
-javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-kamikita.github.io/eldersign_js/wiki_search.js";document.head.appendChild(s);})();
+javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-kamikita.github.io/eldersign-tool/bookmarklet/wiki_search.js";document.head.appendChild(s);})();
 ```
 - Wikiの検索結果画面を出す
 - モンスター詳細ならモンスター名で検索
@@ -81,7 +86,7 @@ javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-ka
 
 ### I'm Feeling Lucky
 ```javascript
-javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-kamikita.github.io/eldersign_js/wiki_feel_lucky.js";document.head.appendChild(s);})();
+javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-kamikita.github.io/eldersign-tool/bookmarklet/wiki_feel_lucky.js";document.head.appendChild(s);})();
 ```
 - Wikiの検索結果の一番上のリンクに飛ぶ
 - Wikiの検索結果画面で使用可能
@@ -89,7 +94,7 @@ javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-ka
 
 ### ランクマッチ プレイヤー別対戦表
 ```javascript
-javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-kamikita.github.io/eldersign_js/rankmatch.js";document.head.appendChild(s);})();
+javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-kamikita.github.io/eldersign-tool/bookmarklet/rankmatch.js";document.head.appendChild(s);})();
 ```
 - ランクマッチの対戦表の下にプレイヤー別の対戦結果/予定を表示
 - ランクマッチ画面で使用可能
@@ -97,7 +102,7 @@ javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-ka
 
 ### HTML ダウンロード
 ```javascript
-javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-kamikita.github.io/eldersign_js/html_download.js";document.head.appendChild(s);})();
+javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-kamikita.github.io/eldersign-tool/bookmarklet/html_download.js";document.head.appendChild(s);})();
 ```
 - 表示中のページHTMLをそのままダウンロード
 - 戦闘結果共有などに
@@ -105,7 +110,7 @@ javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-ka
 
 ### 戦闘リザルト スキル順抽出
 ```javascript
-javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-kamikita.github.io/eldersign_js/skill_order.js";document.head.appendChild(s);})();
+javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-kamikita.github.io/eldersign-tool/bookmarklet/skill_order.js";document.head.appendChild(s);})();
 ```
 - 戦闘結果の各モンスターごとにステータスとスキル設定を抽出
 - 戦闘結果画面で使用可能
@@ -116,15 +121,15 @@ javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-ka
 
 ### 長いスクリーンショット
 ```javascript
-javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-kamikita.github.io/eldersign_js/screenshot.js";document.head.appendChild(s);})();
+javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-kamikita.github.io/eldersign-tool/bookmarklet/screenshot.js";document.head.appendChild(s);})();
 ```
 - 長いページを画面外含めて撮影してPNG保存
 - 戦闘結果画面で使用想定
 - ターンごとにページ分け
 - 外部ライブラリ(html2canvas)を利用
 
-# 使い方
-## PC
+## 使い方
+### PC
 - `javascript:(()=>`から始まる一行のスクリプトをコピー
 - 適当な画面をブックマークに加える
 - 今保存したブックマークを編集
@@ -132,7 +137,7 @@ javascript:(()=>{const s=document.createElement("script");s.src="https://yuki-ka
 - 使用可能な画面でブックマークを実行
 - ブックマークバーに入れておくと使いやすい
 
-## スマホ(Chrome)
+### スマホ(Chrome)
 - `javascript:(()=>`から始まる一行のスクリプトをコピー
 - 適当な画面をブックマークに加える
 - 今保存したブックマークを編集
