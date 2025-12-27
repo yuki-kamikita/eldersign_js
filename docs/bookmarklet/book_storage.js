@@ -9,11 +9,11 @@
     const panel = document.createElement("div");
     panel.id = ACTION_PANEL_ID;
     panel.style.cssText =
-      "position:fixed;bottom:10px;right:10px;z-index:99999;" +
-      "background:rgba(0,0,0,.8);color:#fff;padding:10px 12px;" +
+      "position:fixed;bottom:40px;left:50%;transform:translateX(-50%);z-index:99999;" +
+      "background:rgba(0,0,0,.8);color:#fff;padding:8px 10px;" +
       "border-radius:8px;font-family:monospace;font-size:12px;" +
-      "max-width:calc(100% - 20px);display:flex;gap:8px;flex-wrap:wrap;" +
-      "align-items:center;";
+      "max-width:calc(100% - 12px);display:flex;gap:6px;flex-wrap:nowrap;" +
+      "align-items:center;white-space:nowrap;";
 
     const makeButton = (label) => {
       const button = document.createElement("button");
@@ -27,15 +27,17 @@
 
     const storeButton = makeButton("保管する");
     const bookButton = makeButton("ブックへ");
+    const selectAllButton = makeButton("全選択");
     const status = document.createElement("span");
     status.textContent = "選択待ち";
 
+    panel.appendChild(selectAllButton);
     panel.appendChild(storeButton);
     panel.appendChild(bookButton);
     panel.appendChild(status);
     document.body.appendChild(panel);
 
-    return { panel, storeButton, bookButton, status };
+    return { panel, storeButton, bookButton, selectAllButton, status };
   };
 
   const injectStyles = () => {
@@ -43,9 +45,9 @@
     const style = document.createElement("style");
     style.id = "__es_book_select_style";
     style.textContent =
-      ".es-book-item{position:relative;padding-left:40px;}" +
-      ".es-book-check{position:absolute;left:12px;top:50%;transform:translateY(-50%);}" +
-      ".es-book-item a{cursor:pointer;display:block;border-radius:12px;}" +
+      ".es-book-item{position:relative;}" +
+      ".es-book-item a{cursor:pointer;display:block;border-radius:12px;position:relative;padding-right:40px;}" +
+      ".es-book-check{position:absolute;right:14px;top:50%;transform:translateY(-50%);}" +
       ".es-book-item.is-selected a{" +
       "box-shadow:0 0 0 2px #f3e6c1 inset,0 0 0 4px rgba(81,51,18,.8);" +
       "}";
@@ -94,7 +96,7 @@
       const checkbox = document.createElement("input");
       checkbox.type = "checkbox";
       checkbox.className = "es-book-check";
-      li.insertBefore(checkbox, li.firstChild);
+      anchor.appendChild(checkbox);
       checkbox.addEventListener("change", () => {
         updateSelectionState(li, checkbox, status);
       });
@@ -125,6 +127,16 @@
         return { mid, li };
       })
       .filter(Boolean);
+  };
+
+  const setAllSelections = (checked, status) => {
+    const items = document.querySelectorAll("li.es-book-item");
+    items.forEach((li) => {
+      const checkbox = li.querySelector("input.es-book-check");
+      if (!checkbox) return;
+      checkbox.checked = checked;
+      updateSelectionState(li, checkbox, status);
+    });
   };
 
   const buildMoveUrl = (cmd, mid) => {
@@ -169,11 +181,22 @@
   const init = async () => {
     const list = document.querySelector("nav.block ul");
     if (!list) return;
-    const { storeButton, bookButton, status } = buildActionPanel();
+    const { storeButton, bookButton, selectAllButton, status } = buildActionPanel();
+    let nextSelectAll = true;
     setupSelectableList(list, status);
     updateSelectedCount(status);
     storeButton.addEventListener("click", () => runMove("a1", status));
     bookButton.addEventListener("click", () => runMove("a2", status));
+    selectAllButton.addEventListener("click", () => {
+      if (nextSelectAll) {
+        setAllSelections(true, status);
+        selectAllButton.textContent = "全削除";
+      } else {
+        setAllSelections(false, status);
+        selectAllButton.textContent = "全選択";
+      }
+      nextSelectAll = !nextSelectAll;
+    });
   };
 
   init().catch((err) => alert("エラー: " + err.message));
