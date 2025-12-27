@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>ブックマークレット案内 - エルダーサイン</title>
+    <link rel="stylesheet" href="../theme.css?v18" />
+  </head>
+  <body>
+    <main>
+      <header class="reveal">
+        <p class="subtitle">Elder Sign Bookmarklets</p>
+        <h1>ブックマークレット案内</h1>
+        <p class="subtitle">ゲーム画面で使える拡張ツール。はじめてでも迷わないように、使い方から順番に説明します。</p>
+        <div class="chip-row">
+          <span class="chip">初心者向け</span>
+          <span class="chip">PC/スマホ対応</span>
+          <span class="chip">コピーして使うだけ</span>
+        </div>
+        <div class="nav-links">
+          <a class="button" href="../index.html">ツール集トップへ</a>
+          <a class="button secondary" href="#list">ブックマークレット一覧へ</a>
+        </div>
+      </header>
+
+      <section class="reveal">
+        <div class="section-title">
+          <h2>ブックマークレットとは</h2>
+          <span>ざっくり説明</span>
+        </div>
+        <div class="note">
+          ブラウザの「ブックマーク」に、特別な短いスクリプトを登録しておき、必要な画面で実行する仕組みです。
+          アプリのインストールは不要で、いつでもオン/オフできます。
+        </div>
+      </section>
+
+      <section class="reveal">
+        <div class="section-title">
+          <h2>PCでの使い方</h2>
+          <span>最初の1回だけ</span>
+        </div>
+        <ol class="steps">
+          <li>どのページでも良いので、まずブックマークを1つ作成します。</li>
+          <li>作成したブックマークを編集し、URL欄を削除して下のスクリプトを貼り付けます。</li>
+          <li>エルダーサインの対象画面で、そのブックマークを実行します。</li>
+        </ol>
+        <div class="placeholder">使い方スクリーンショットを後で追加</div>
+      </section>
+
+      <section class="reveal">
+        <div class="section-title">
+          <h2>スマホ(Chrome)での使い方</h2>
+          <span>ちょっとだけ手順が多い</span>
+        </div>
+        <ol class="steps">
+          <li>どのページでも良いので、まずブックマークを1つ作成します。</li>
+          <li>作成したブックマークを編集し、URL欄を削除して下のスクリプトを貼り付けます。</li>
+          <li>対象画面を開いた状態でURLバーをタップし、ブックマーク名を入力します。</li>
+          <li>候補に表示されたブックマークをタップして実行します。</li>
+        </ol>
+        <div class="note">
+          ※ PCと違って、ブックマーク一覧から選ぶだけだと動かないことがあります。URLバー経由で実行してください。
+        </div>
+        <div class="placeholder">使い方スクリーンショットを後で追加</div>
+      </section>
+
+      <section class="reveal" id="list">
+        <div class="section-title">
+          <h2>ブックマークレット一覧</h2>
+          <span>コピーして使う</span>
+        </div>
+        <div class="grid">
+          <article
+            class="card is-clickable"
+            role="button"
+            tabindex="0"
+            aria-label="ステータス 詳細表示をコピー"
+            data-bookmarklet="javascript:(()=>{const s=document.createElement(&quot;script&quot;);s.src=&quot;https://yuki-kamikita.github.io/eldersign-tool/bookmarklet/monster_status.js&quot;;document.head.appendChild(s);})();"
+          >
+            <h3>ステータス 詳細表示</h3>
+            <p>個体値の%や最大レベル、次グレードなどを表示。</p>
+            <div class="card-media">
+              <img class="card-image" src="../image/status.png" alt="ステータス詳細のスクリーンショット" />
+            </div>
+            <p class="copy-hint">タップでコピー</p>
+          </article>
+          <article
+            class="card is-clickable"
+            role="button"
+            tabindex="0"
+            aria-label="コンパニオン 派遣研究力をコピー"
+            data-bookmarklet="javascript:(()=>{const s=document.createElement(&quot;script&quot;);s.src=&quot;https://yuki-kamikita.github.io/eldersign-tool/bookmarklet/companion.js&quot;;document.head.appendChild(s);})();"
+          >
+            <h3>コンパニオン 派遣研究力</h3>
+            <p>コンパニオンの研究力表示。施設名タップで派遣画面へ。</p>
+            <div class="card-media">
+              <img class="card-image" src="../image/companion.png" alt="コンパニオン研究力のスクリーンショット" />
+            </div>
+            <p class="copy-hint">タップでコピー</p>
+          </article>
+          <article
+            class="card is-clickable"
+            role="button"
+            tabindex="0"
+            aria-label="バザー 検索ボタンをコピー"
+            data-bookmarklet="javascript:(()=>{const s=document.createElement(&quot;script&quot;);s.src=&quot;https://yuki-kamikita.github.io/eldersign-tool/bookmarklet/bazaar_search.js&quot;;document.head.appendChild(s);})();"
+          >
+            <h3>バザー 検索ボタン</h3>
+            <p>バザー検索条件の変更を楽にする。</p>
+            <div class="card-media">
+              <img class="card-image" src="../image/bazaar.png" alt="バザー検索ボタンのスクリーンショット" />
+            </div>
+            <p class="copy-hint">タップでコピー</p>
+          </article>
+          <article
+            class="card is-clickable"
+            role="button"
+            tabindex="0"
+            aria-label="経験値 表示をコピー"
+            data-bookmarklet="javascript:(()=>{const s=document.createElement(&quot;script&quot;);s.src=&quot;https://yuki-kamikita.github.io/eldersign-tool/bookmarklet/exp.js&quot;;document.head.appendChild(s);})();"
+          >
+            <h3>経験値 表示</h3>
+            <p>合成時に取得できる経験値を一覧に表示。</p>
+            <div class="card-media">
+              <img class="card-image" src="../image/exp.png" alt="経験値表示のスクリーンショット" />
+            </div>
+            <p class="copy-hint">タップでコピー</p>
+          </article>
+          <article
+            class="card is-clickable"
+            role="button"
+            tabindex="0"
+            aria-label="バザー 全種族・全グレード検索をコピー"
+            data-bookmarklet="javascript:(()=>{const s=document.createElement(&quot;script&quot;);s.src=&quot;https://yuki-kamikita.github.io/eldersign-tool/bookmarklet/bazaar_all.js&quot;;document.head.appendChild(s);})();"
+          >
+            <h3>バザー 全種族・全グレード検索</h3>
+            <p>4種族*4グレードの検索を一括実行。</p>
+            <p class="copy-hint">タップでコピー</p>
+          </article>
+          <article
+            class="card is-clickable"
+            role="button"
+            tabindex="0"
+            aria-label="Wiki 検索をコピー"
+            data-bookmarklet="javascript:(()=>{const s=document.createElement(&quot;script&quot;);s.src=&quot;https://yuki-kamikita.github.io/eldersign-tool/bookmarklet/wiki_search.js&quot;;document.head.appendChild(s);})();"
+          >
+            <h3>Wiki 検索</h3>
+            <p>モンスター名や選択文字でWiki検索。</p>
+            <p class="copy-hint">タップでコピー</p>
+          </article>
+          <article
+            class="card is-clickable"
+            role="button"
+            tabindex="0"
+            aria-label="I'm Feeling Luckyをコピー"
+            data-bookmarklet="javascript:(()=>{const s=document.createElement(&quot;script&quot;);s.src=&quot;https://yuki-kamikita.github.io/eldersign-tool/bookmarklet/wiki_feel_lucky.js&quot;;document.head.appendChild(s);})();"
+          >
+            <h3>I'm Feeling Lucky</h3>
+            <p>Wiki検索結果の一番上にジャンプ。</p>
+            <p class="copy-hint">タップでコピー</p>
+          </article>
+          <article
+            class="card is-clickable"
+            role="button"
+            tabindex="0"
+            aria-label="ランクマッチ プレイヤー別対戦表をコピー"
+            data-bookmarklet="javascript:(()=>{const s=document.createElement(&quot;script&quot;);s.src=&quot;https://yuki-kamikita.github.io/eldersign-tool/bookmarklet/rankmatch.js&quot;;document.head.appendChild(s);})();"
+          >
+            <h3>ランクマッチ プレイヤー別対戦表</h3>
+            <p>プレイヤー別の対戦結果/予定を表示。</p>
+            <p class="copy-hint">タップでコピー</p>
+          </article>
+          <article
+            class="card is-clickable"
+            role="button"
+            tabindex="0"
+            aria-label="HTML ダウンロードをコピー"
+            data-bookmarklet="javascript:(()=>{const s=document.createElement(&quot;script&quot;);s.src=&quot;https://yuki-kamikita.github.io/eldersign-tool/bookmarklet/html_download.js&quot;;document.head.appendChild(s);})();"
+          >
+            <h3>HTML ダウンロード</h3>
+            <p>表示中のページHTMLをそのまま保存。</p>
+            <p class="copy-hint">タップでコピー</p>
+          </article>
+          <article
+            class="card is-clickable"
+            role="button"
+            tabindex="0"
+            aria-label="戦闘リザルト スキル順抽出をコピー"
+            data-bookmarklet="javascript:(()=>{const s=document.createElement(&quot;script&quot;);s.src=&quot;https://yuki-kamikita.github.io/eldersign-tool/bookmarklet/skill_order.js&quot;;document.head.appendChild(s);})();"
+          >
+            <h3>戦闘リザルト スキル順抽出</h3>
+            <p>戦闘結果の各モンスターのスキル設定を抽出。</p>
+            <p class="copy-hint">タップでコピー</p>
+          </article>
+          <article
+            class="card is-clickable"
+            role="button"
+            tabindex="0"
+            aria-label="長いスクリーンショットをコピー"
+            data-bookmarklet="javascript:(()=>{const s=document.createElement(&quot;script&quot;);s.src=&quot;https://yuki-kamikita.github.io/eldersign-tool/bookmarklet/screenshot.js&quot;;document.head.appendChild(s);})();"
+          >
+            <h3>長いスクリーンショット</h3>
+            <p>ページ全体を撮影してPNG保存。</p>
+            <p class="copy-hint">タップでコピー</p>
+          </article>
+        </div>
+      </section>
+
+      <div id="toast" class="toast" aria-live="polite"></div>
+      <footer>使い方や注意点は随時アップデートします。</footer>
+    </main>
+    <script>
+      const toast = document.getElementById("toast");
+      const showToast = (message) => {
+        toast.textContent = message;
+        toast.classList.add("show");
+        clearTimeout(showToast.timer);
+        showToast.timer = setTimeout(() => {
+          toast.classList.remove("show");
+        }, 3200);
+      };
+
+      const copyText = async (text) => {
+        
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(text);
+          return;
+        }
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.setAttribute("readonly", "");
+        textarea.style.position = "fixed";
+        textarea.style.top = "-9999px";
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+      };
+
+      document.querySelectorAll("[data-bookmarklet]").forEach((card) => {
+        const handler = async () => {
+          const text = card.dataset.bookmarklet;
+          try {
+            await copyText(text);
+            showToast("コピー完了。ブックマークのURL欄に貼り付けて保存してください。");
+          } catch (error) {
+            showToast("コピーに失敗しました");
+          }
+        };
+        card.addEventListener("click", handler);
+        card.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            handler();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
