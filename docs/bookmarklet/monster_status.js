@@ -28,6 +28,8 @@
   });
 
   const TARGETS = ["HP", "攻撃", "魔力", "防御", "命中", "敏捷"];
+  const GRADE_TOOL_URL = "https://yuki-kamikita.github.io/eldersign-tool/web/grade.html";
+  // const GRADE_TOOL_URL = "http://localhost:8080/docs/web/grade.html";
 
   function getLevelInfo() {
     const h3 =
@@ -161,6 +163,64 @@
     return gm ? parseInt(gm[1], 10) : null;
   }
 
+  function getMonsterName() {
+    const h2 =
+      document.querySelector("div.card_d header.card h2") ||
+      document.querySelector("h2");
+    if (!h2) return null;
+    return h2.textContent.replace(/\s+/g, " ").trim();
+  }
+
+  function getMonsterKind() {
+    const card = document.querySelector("img#card");
+    if (!card || !card.src) return null;
+    const m = card.src.match(/_([0-9])g\d+/i);
+    if (!m) return null;
+    switch (m[1]) {
+      case "0":
+        return "原種";
+      case "1":
+        return "亜種1";
+      case "2":
+        return "亜種2";
+      case "3":
+        return "亜種3";
+      default:
+        return null;
+    }
+  }
+
+  function buildGradeToolUrl(statInfo) {
+    if (!statInfo) return null;
+    const params = new URLSearchParams();
+
+    const name = getMonsterName();
+    const kind = getMonsterKind();
+    if (name) params.set("name", name);
+    if (kind) params.set("kind", kind);
+
+    const keyMap = {
+      HP: "hp",
+      攻撃: "atk",
+      魔力: "mag",
+      防御: "def",
+      命中: "hit",
+      敏捷: "agi",
+    };
+
+    for (const label of TARGETS) {
+      const info = statInfo[label];
+      if (!info) continue;
+      const key = keyMap[label];
+      if (!key) continue;
+      params.set(`${key}_base`, String(info.base));
+      params.set(`${key}_bonus`, String(info.bonus));
+    }
+
+    const query = params.toString();
+    return query ? `${GRADE_TOOL_URL}?${query}` : GRADE_TOOL_URL;
+  }
+
   function buildMaxLevelLines(statInfo, maxLevel, rarity) {
     const rc = GROWTH_COEFF_BY_RARITY[rarity] ?? 1.0;
     const Gmax = 1 + rc;
@@ -252,7 +312,7 @@
     return lines;
   }
 
-  function renderPanel(lines, moreLines) {
+  function renderPanel(lines, moreLines, gradeUrl) {
     const box = document.createElement("div");
     box.style.cssText =
       "position:fixed;top:10px;right:10px;z-index:99999;background:rgba(0,0,0,.8);" +
@@ -260,9 +320,29 @@
       "color:#fff;padding:10px 15px;border-radius:8px;font-family:monospace;" +
       "font-size:14px;max-width:90%;";
 
+    function appendLines(target, list) {
+      list.forEach((line, index) => {
+        if (index > 0) target.appendChild(document.createTextNode("\n"));
+        if (gradeUrl && line === "次のグレードになるには") {
+          const link = document.createElement("a");
+          link.href = gradeUrl;
+          link.target = "_blank";
+          link.rel = "noopener";
+          link.textContent = line;
+          link.style.cssText = "text-decoration:underline;color:inherit;cursor:pointer;";
+          link.onclick = (e) => {
+            e.stopPropagation();
+          };
+          target.appendChild(link);
+          return;
+        }
+        target.appendChild(document.createTextNode(line));
+      });
+    }
+
     const pre = document.createElement("pre");
     pre.style.cssText = "margin:0;white-space:pre;";
-    pre.textContent = lines.join("\n");
+    appendLines(pre, lines);
     box.appendChild(pre);
 
     const toggleWrap = document.createElement("div");
@@ -281,7 +361,7 @@
       if (opened) return;
       const nextPre = document.createElement("pre");
       nextPre.style.cssText = "margin:8px 0 0;white-space:pre;";
-      nextPre.textContent = moreLines.join("\n");
+      appendLines(nextPre, moreLines);
       box.appendChild(nextPre);
       toggleWrap.remove();
       opened = true;
@@ -325,7 +405,8 @@
     const maxLevelLines = buildMaxLevelLines(statInfo, maxLevel, rarity);
     const nextGradeLines = buildNextGradeLines(statInfo, evalValue);
     const moreLines = [...maxLevelLines, ...nextGradeLines];
-    renderPanel(lines, moreLines);
+    const gradeUrl = buildGradeToolUrl(statInfo);
+    renderPanel(lines, moreLines, gradeUrl);
   } catch (e) {
     alert("エラー: " + e.message);
   }
