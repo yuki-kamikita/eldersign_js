@@ -19,9 +19,6 @@
       const button = document.createElement("button");
       button.type = "button";
       button.textContent = label;
-      button.style.cssText =
-        "background:#fff;color:#000;border:none;border-radius:6px;" +
-        "padding:6px 10px;font-size:12px;cursor:pointer;";
       return button;
     };
 
