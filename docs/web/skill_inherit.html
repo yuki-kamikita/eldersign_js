@@ -827,6 +827,12 @@
       });
 
       [inputs.bonusSilver, inputs.bonusBoost, inputs.bonusLamp].forEach((input) => {
+        const handler = () => {
+          saveBonusSettings();
+          updateResult();
+        };
+        input.addEventListener("input", handler);
+        input.addEventListener("click", handler);
         input.addEventListener("change", saveBonusSettings);
       });
 
