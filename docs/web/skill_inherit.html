@@ -821,11 +821,12 @@
 
       function setChipValue(input, value) {
         if (!input || value == null) return;
-        input.value = value;
+        const strValue = String(value);
+        input.value = strValue;
         const group = document.querySelector(`.chip-group[data-chip-target="${input.id}"]`);
         if (!group) return;
         group.querySelectorAll(".chip-button").forEach((button) => {
-          const isActive = button.dataset.value === value;
+          const isActive = button.dataset.value === strValue;
           button.classList.toggle("is-active", isActive);
         });
       }
