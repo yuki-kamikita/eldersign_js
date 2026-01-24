@@ -814,16 +814,26 @@
           if (fromPartyId === toPartyId && fromIndex === toIndex) return;
           const fromEntries = getPartyEntries(fromPartyId);
           const toEntries = getPartyEntries(toPartyId);
-          const temp = fromEntries[fromIndex];
-          fromEntries[fromIndex] = toEntries[toIndex];
-          toEntries[toIndex] = temp;
+          if (fromPartyId === toPartyId) {
+            const temp = fromEntries[fromIndex];
+            fromEntries[fromIndex] = toEntries[toIndex];
+            toEntries[toIndex] = temp;
+            saveStore(store);
+            renderAll();
+            setStatus(`PT${fromPartyId}の枠を入れ替えました`);
+            return;
+          }
+
+          const [moved] = fromEntries.splice(fromIndex, 1);
+          if (!moved) return;
+          if (fromEntries.length === 0) {
+            fromEntries.push(defaultEntry());
+          }
+          const insertIndex = Math.max(0, Math.min(toIndex, toEntries.length));
+          toEntries.splice(insertIndex, 0, moved);
           saveStore(store);
           renderAll();
-          if (fromPartyId === toPartyId) {
-            setStatus(`PT${fromPartyId}の枠を入れ替えました`);
-          } else {
-            setStatus(`PT${fromPartyId}とPT${toPartyId}の枠を入れ替えました`);
-          }
+          setStatus(`PT${fromPartyId}からPT${toPartyId}へ枠を移動しました`);
         };
 
         const swapSkills = (partyId, slotIndex, fromIndex, toIndex) => {
