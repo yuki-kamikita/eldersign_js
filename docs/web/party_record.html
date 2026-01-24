@@ -48,6 +48,17 @@
         font-size: 1.1rem;
       }
 
+      .party-name {
+        padding: 8px 12px;
+        border-radius: 999px;
+        border: 1px solid var(--md-sys-outline-variant);
+        background: var(--md-sys-surface);
+        color: var(--md-sys-on-surface);
+        font-size: 1rem;
+        font-weight: 600;
+        min-width: 160px;
+      }
+
       .party-actions {
         display: flex;
         align-items: center;
@@ -59,6 +70,16 @@
         display: grid;
         gap: 18px;
         grid-template-columns: repeat(2, minmax(260px, 1fr));
+      }
+
+      .party-add {
+        margin-top: 16px;
+        display: flex;
+        justify-content: center;
+      }
+
+      .party-add .button {
+        min-width: 220px;
       }
 
       .slot-card {
@@ -354,6 +375,9 @@
           <div class="status-text" id="status-text">保存は自動です</div>
         </div>
         <div class="party-list" id="party-list"></div>
+        <div class="party-add">
+          <button class="button secondary" type="button" id="add-party">PT追加</button>
+        </div>
       </section>
     </main>
 
@@ -413,12 +437,12 @@
     <template id="party-template">
       <section class="party-section">
         <div class="party-header">
-          <h3 class="party-title">PT</h3>
+          <input class="party-name" type="text" placeholder="PT名" />
           <div class="party-actions">
             <button class="button secondary" type="button" data-action="share">共有URLをコピー</button>
             <button class="button secondary" type="button" data-action="export">JSONエクスポート</button>
             <button class="button secondary" type="button" data-action="import">JSONインポート</button>
-            <button class="button secondary" type="button" data-action="add">+ 枠を追加</button>
+            <button class="button secondary" type="button" data-action="add">枠を追加</button>
             <button class="button secondary" type="button" data-action="clear">このPTを全消去</button>
           </div>
         </div>
@@ -430,7 +454,7 @@
       (() => {
         const DEFAULT_SLOT_COUNT = 4;
         const SKILL_COUNT = 5;
-        const PARTY_COUNT = 4;
+        const DEFAULT_PARTY_COUNT = 4;
         const STORAGE_KEY = "eldersign_party_record_v2";
         const LEGACY_KEY = "eldersign_party_record_v1";
 
@@ -438,6 +462,7 @@
         const partyTemplate = document.getElementById("party-template");
         const template = document.getElementById("slot-template");
         const statusText = document.getElementById("status-text");
+        const addPartyButton = document.getElementById("add-party");
         const toast = document.getElementById("toast");
         const toastMessage = document.getElementById("toast-message");
         const toastUndo = document.getElementById("toast-undo");
@@ -477,6 +502,8 @@
                 return {
                   activeParty: parsed.activeParty || 1,
                   parties: parsed.parties || {},
+                  partyCount: parsed.partyCount || DEFAULT_PARTY_COUNT,
+                  partyNames: parsed.partyNames || {},
                 };
               }
             }
@@ -488,13 +515,15 @@
                 return {
                   activeParty: 1,
                   parties: { 1: buildParty(legacyParsed) },
+                  partyCount: DEFAULT_PARTY_COUNT,
+                  partyNames: {},
                 };
               }
             }
           } catch (error) {
-            return { activeParty: 1, parties: {} };
-          }
-          return { activeParty: 1, parties: {} };
+          return { activeParty: 1, parties: {}, partyCount: DEFAULT_PARTY_COUNT, partyNames: {} };
+        }
+        return { activeParty: 1, parties: {}, partyCount: DEFAULT_PARTY_COUNT, partyNames: {} };
         };
 
         const saveStore = (store) => {
@@ -552,14 +581,28 @@
         };
 
         const store = loadStore();
+        if (!Number.isFinite(store.partyCount) || store.partyCount < 1) {
+          store.partyCount = DEFAULT_PARTY_COUNT;
+        }
+        if (!store.partyNames || typeof store.partyNames !== "object") {
+          store.partyNames = {};
+        }
         const ensureParty = (partyId) => {
           if (!store.parties[partyId]) {
             store.parties[partyId] = buildParty();
           }
           return store.parties[partyId];
         };
+        const ensurePartyCount = (count) => {
+          const targetCount = Math.max(1, Math.floor(count));
+          store.partyCount = targetCount;
+          for (let i = 1; i <= targetCount; i += 1) {
+            ensureParty(i);
+          }
+        };
         const clampParty = (partyId) =>
-          Math.min(PARTY_COUNT, Math.max(1, Number.parseInt(partyId, 10) || 1));
+          Math.min(store.partyCount, Math.max(1, Number.parseInt(partyId, 10) || 1));
+        ensurePartyCount(store.partyCount);
         store.activeParty = clampParty(store.activeParty);
         const slotRefs = {};
 
@@ -636,7 +679,7 @@
           const requestedSlot = Number.isFinite(slotValue) ? slotValue - 1 : null;
 
           const partyValue = Number.parseInt(params.get("party"), 10);
-          const requestedParty = Number.isFinite(partyValue) ? clampParty(partyValue) : null;
+          const requestedParty = Number.isFinite(partyValue) ? Math.max(1, Math.floor(partyValue)) : null;
 
           return { name, imageUrl, skills, requestedSlot, requestedParty };
         };
@@ -644,6 +687,9 @@
         const applyIncoming = (incoming) => {
           if (!incoming) return;
           const targetParty = incoming.requestedParty || 1;
+          if (targetParty > store.partyCount) {
+            ensurePartyCount(targetParty);
+          }
           const slotIndex = resolveSlot(targetParty, incoming.requestedSlot);
           if (slotIndex === null) {
             setStatus("空き枠がありません。手動で入れ替えてください。");
@@ -727,15 +773,37 @@
         };
 
         const clearAll = (partyId) => {
-          const confirmed = window.confirm(`PT${partyId}の内容を消去します。よろしいですか？`);
+          const confirmed = window.confirm(`PT${partyId}を削除します。よろしいですか？`);
           if (!confirmed) return;
-          const entries = getPartyEntries(partyId);
-          entries.length = 0;
-          for (let i = 0; i < DEFAULT_SLOT_COUNT; i += 1) {
-            entries.push(defaultEntry());
+          const targetId = Math.max(1, Math.floor(partyId));
+          if (store.partyCount <= 1) {
+            const entries = getPartyEntries(1);
+            entries.length = 0;
+            for (let i = 0; i < DEFAULT_SLOT_COUNT; i += 1) {
+              entries.push(defaultEntry());
+            }
+            saveStore(store);
+            setStatus("PT1のみなので枠を初期化しました");
+            renderAll();
+            return;
           }
+          delete store.parties[targetId];
+          delete store.partyNames[String(targetId)];
+          for (let id = targetId + 1; id <= store.partyCount; id += 1) {
+            if (store.parties[id]) {
+              store.parties[id - 1] = store.parties[id];
+              delete store.parties[id];
+            }
+            const name = store.partyNames[String(id)];
+            if (name != null) {
+              store.partyNames[String(id - 1)] = name;
+              delete store.partyNames[String(id)];
+            }
+          }
+          store.partyCount = Math.max(1, store.partyCount - 1);
+          store.activeParty = clampParty(store.activeParty);
           saveStore(store);
-          setStatus(`PT${partyId}を消去しました`);
+          setStatus(`PT${targetId}を削除しました`);
           renderAll();
         };
 
@@ -745,6 +813,14 @@
           saveStore(store);
           renderAll();
           setStatus(`PT${partyId}に枠を追加しました`);
+        };
+
+        const addParty = () => {
+          const nextPartyId = store.partyCount + 1;
+          ensurePartyCount(nextPartyId);
+          saveStore(store);
+          renderAll();
+          setStatus(`PT${nextPartyId}を追加しました`);
         };
 
         const serializeEntry = (entry) => ({
@@ -773,7 +849,10 @@
           if (!payload || !Array.isArray(payload.entries)) {
             throw new Error("共有データの形式が不正です");
           }
-          const targetParty = clampParty(partyId || payload.party || 1);
+          const targetParty = Math.max(1, Math.floor(partyId || payload.party || 1));
+          if (targetParty > store.partyCount) {
+            ensurePartyCount(targetParty);
+          }
           const confirmed = window.confirm(`PT${targetParty}に共有データを読み込みます。上書きしますか？`);
           if (!confirmed) return false;
           const entries = buildParty(payload.entries);
@@ -1030,15 +1109,22 @@
         const renderAll = () => {
           partyList.innerHTML = "";
           Object.keys(slotRefs).forEach((key) => delete slotRefs[key]);
-          for (let partyId = 1; partyId <= PARTY_COUNT; partyId += 1) {
+          for (let partyId = 1; partyId <= store.partyCount; partyId += 1) {
             const entries = getPartyEntries(partyId);
             const clone = partyTemplate.content.cloneNode(true);
             const section = clone.querySelector(".party-section");
-            const title = clone.querySelector(".party-title");
+            const nameInput = clone.querySelector(".party-name");
             const grid = clone.querySelector(".party-grid");
             const actions = clone.querySelectorAll("[data-action]");
             if (section) section.dataset.party = String(partyId);
-            if (title) title.textContent = `PT ${partyId}`;
+            if (nameInput) {
+              nameInput.placeholder = `PT ${partyId}`;
+              nameInput.value = store.partyNames[String(partyId)] || "";
+              nameInput.addEventListener("input", () => {
+                store.partyNames[String(partyId)] = nameInput.value.trim();
+                saveStore(store);
+              });
+            }
             actions.forEach((button) => {
               button.dataset.party = String(partyId);
               const action = button.dataset.action;
@@ -1107,6 +1193,9 @@
             toast.classList.remove("show");
             handler();
           });
+        }
+        if (addPartyButton) {
+          addPartyButton.addEventListener("click", addParty);
         }
         renderAll();
         const shareData = readShareData();
