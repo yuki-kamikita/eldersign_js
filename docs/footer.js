@@ -1,10 +1,12 @@
 (() => {
   const footerHtml = `
     各ツールは制作中です。順次修正・追加予定。
-     <br>
+    <br>
     もしよければ
-     <a href="https://www.amazon.jp/hz/wishlist/ls/193UZ703SCTQJ?ref_=wl_share" target="_blank" rel="noopener">欲しいものリスト</a> 
+    <a href="https://www.amazon.jp/hz/wishlist/ls/193UZ703SCTQJ?ref_=wl_share" target="_blank" rel="noopener">欲しいものリスト</a>
     から支援していただけると、アップデートのモチベーションになります。
+    <br>
+    ※本ツールはファンによって製作された非公式のもので、運営・開発元とは一切関係ありません。
   `.trim();
 
   const main = document.querySelector("main");
