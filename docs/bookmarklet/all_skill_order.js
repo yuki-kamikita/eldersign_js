@@ -78,8 +78,8 @@
   // 個体番号を表示名に変換
   const getVariantLabel = (value) => {
     if (value == null) return "";
-    if (value === 0) return "原種";
-    return `亜種${value}`;
+    if (value === 0) return "原";
+    return `亜${value}`;
   };
 
   // "LvX" からレベルを抽出
@@ -413,6 +413,7 @@
     const memberTable = document.querySelector("table.rank");
     const memberOrder = [];
     const nameByLetter = new Map();
+    const letterByName = new Map();
     if (memberTable) {
       memberTable.querySelectorAll("tr").forEach((row) => {
         const letterCell = row.querySelector("th.no");
@@ -422,6 +423,7 @@
         const name = normalizeName(nameCell.textContent);
         if (!letter || !name) return;
         nameByLetter.set(letter, name);
+        letterByName.set(name, letter);
         if (!memberOrder.includes(name)) memberOrder.push(name);
       });
     }
@@ -632,7 +634,7 @@
         urlHeaders.push(`url${String(i).padStart(2, "0")}`);
       }
       const rows = [
-        ["player", "出場回数", "monster", "level", "variant", "image", "A(アクティブ)", "P(コンパニオン)", ...urlHeaders],
+        ["player", "letter", "出場回数", "monster", "level", "variant", "image", "A(アクティブ)", "P(コンパニオン)", ...urlHeaders],
       ];
       const playerNames = memberOrder.length ? memberOrder.slice() : [];
       // 結果ページからしか取れなかったプレイヤーも含める
@@ -664,6 +666,7 @@
             }
             rows.push([
               playerName,
+              letterByName.get(playerName) || "",
               appearances,
               displayName,
               level,
